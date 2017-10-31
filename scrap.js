@@ -1,7 +1,7 @@
 var Horseman = require('node-horseman');
 var horseman = new Horseman();
 
-var Startup = require('./model');
+var Startup = require('./models/Startup');
 
 var startups = [];
 
@@ -9,19 +9,18 @@ function getStartups() {
     return horseman.evaluate(function() {
         console.log('[Info] Going through page startups...');
 
-        var startupSelector = "#bloc_results_list > .listing > .item";
+        var startupSelector = "#bloc_results_list .listing .item";
         var startups = [];
 
         $(startupSelector).each(function(item) {
             var startup = {
-                name: $(this).children(".wrapper > h3").text(),
-                logo: $(this).children(".image > a > .startuplogo_bloc1 > img").attr("src"),
-                description: $(this).children(".image > a > .overlay > p").text(),
-                activity: $(this).children(".wrapper > .info > .type:first").text(),
-                address: $(this).children(".wrapper > figure").text()
+                name: $(this).find(".wrapper h3").text(),
+                logo: $(this).find(".image img").attr("src"),
+                description: $(this).find(".image p").text(),
+                activity: $(this).find(".wrapper .type:first span").text(),
+                address: $(this).find(".wrapper figure").text()
             };
 
-            console.log('[Info] Adding new startup to the list...');
             startups.push(startup);
         });
 
@@ -66,9 +65,11 @@ horseman
         Startup.insertMany(startups)
             .then(function(docs) {
                 console.log("[Success] Bulk insertion into mongoDB database done! " + docs.length + " insertions.");
+                process.exit();
             })
             .catch(function(err) {
                 console.log("[Error] Insertions failed... " + err);
+                process.exit(1);
             });
 
         horseman.close();

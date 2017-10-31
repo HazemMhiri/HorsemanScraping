@@ -4,11 +4,17 @@
   "description": "tool for scraping data from disruptunisia",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "scrap": "node scrap.js"
   },
   "author": "Ibrahim Hazem M'hiri",
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
     "mongoose": "^4.12.4",
+    "mongoose-regex-search": "^0.4.0",
     "node-horseman": "^3.3.0"
+  },
+  "engines": {
+    "node": "6.10.0"
   }
 }
